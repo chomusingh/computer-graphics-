@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+// Structure to represent a point
+struct Point {
+    float x, y;
+};
+
+// Function to translate the triangle by tx along x-axis and ty along y-axis
+void translate(Point &p, float tx, float ty) {
+    p.x += tx;
+    p.y += ty;
+}
+
+// Function to display the coordinates of the triangle's vertices
+void display(Point p1, Point p2, Point p3) {
+    cout << "New Coordinates of Triangle Vertices after Translation: \n";
+    cout << "P1: (" << p1.x << ", " << p1.y << ")\n";
+    cout << "P2: (" << p2.x << ", " << p2.y << ")\n";
+    cout << "P3: (" << p3.x << ", " << p3.y << ")\n";
+}
+
+int main() {
+    // Define the original coordinates of the equilateral triangle
+    Point p1 = {0, 0};  // Vertex 1
+    Point p2 = {1, 0};  // Vertex 2
+    Point p3 = {0.5, 0.866};  // Vertex 3 (height of an equilateral triangle)
+
+    // Display original coordinates
+    cout << "Original Coordinates of Triangle Vertices: \n";
+    cout << "P1: (" << p1.x << ", " << p1.y << ")\n";
+    cout << "P2: (" << p2.x << ", " << p2.y << ")\n";
+    cout << "P3: (" << p3.x << ", " << p3.y << ")\n";
+
+    // Define the translation distances along the x and y axes
+    float tx = 2.0, ty = 3.0;
+
+    // Perform translation on each vertex
+    translate(p1, tx, ty);
+    translate(p2, tx, ty);
+    translate(p3, tx, ty);
+
+    // Display the new coordinates after translation
+    display(p1, p2, p3);
+
+    return 0;
+}

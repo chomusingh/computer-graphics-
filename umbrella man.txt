@@ -1,0 +1,60 @@
+#include <graphics.h>
+#include <conio.h> // For getch()
+
+void drawUmbrella(int x, int y) {
+    setcolor(WHITE);
+    setfillstyle(SOLID_FILL, RED);
+    pieslice(x, y, 0, 180, 50); // Umbrella arc
+    line(x - 50, y, x + 50, y); // Umbrella base
+    line(x, y, x, y + 60);      // Umbrella handle
+}
+
+void drawMan(int x, int y) {
+    setcolor(WHITE);
+    // Head
+    circle(x, y, 10);
+    // Body
+    line(x, y + 10, x, y + 50);
+    // Arms
+    line(x, y + 20, x - 15, y + 30);
+    line(x, y + 20, x + 15, y + 30);
+    // Legs
+    line(x, y + 50, x - 10, y + 70);
+    line(x, y + 50, x + 10, y + 70);
+}
+
+void drawRain() {
+    for (int i = 0; i < 100; i++) {
+        int rx = rand() % getmaxx();
+        int ry = rand() % getmaxy();
+        line(rx, ry, rx + 2, ry + 10);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, (char*)"");
+
+    int x = 200, y = 200;
+    char ch;
+
+    do {
+        cleardevice();
+
+        drawRain();
+        drawUmbrella(x, y - 30);
+        drawMan(x, y);
+
+        delay(100);
+        if (kbhit()) {
+            ch = getch();
+            if (ch == 'a') x -= 10; // Move left
+            if (ch == 'd') x += 10; // Move right
+            if (ch == 'w') y -= 10; // Move up
+            if (ch == 's') y += 10; // Move down
+        }
+    } while (ch != 'q'); // Press 'q' to quit
+
+    closegraph();
+    return 0;
+}

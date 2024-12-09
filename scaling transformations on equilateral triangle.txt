@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cmath> // For sqrt
+using namespace std;
+
+struct Point {
+    double x, y;
+};
+
+void scale(Point& p, double factor) {
+    p.x *= factor;
+    p.y *= factor;
+}
+
+void printTriangle(const Point& p1, const Point& p2, const Point& p3) {
+    cout << "Triangle vertices:\n";
+    cout << "(" << p1.x << ", " << p1.y << ")\n";
+    cout << "(" << p2.x << ", " << p2.y << ")\n";
+    cout << "(" << p3.x << ", " << p3.y << ")\n";
+}
+
+int main() {
+    // Define equilateral triangle vertices
+    Point p1 = {0.0, sqrt(3) / 3.0};  // Top vertex
+    Point p2 = {-0.5, -sqrt(3) / 6.0}; // Bottom-left vertex
+    Point p3 = {0.5, -sqrt(3) / 6.0};  // Bottom-right vertex
+
+    double scaleFactor;
+    cout << "Enter scaling factor: ";
+    cin >> scaleFactor;
+
+    cout << "\nOriginal Triangle:\n";
+    printTriangle(p1, p2, p3);
+
+    scale(p1, scaleFactor);
+    scale(p2, scaleFactor);
+    scale(p3, scaleFactor);
+
+    cout << "\nScaled Triangle:\n";
+    printTriangle(p1, p2, p3);
+
+    return 0;
+}
+

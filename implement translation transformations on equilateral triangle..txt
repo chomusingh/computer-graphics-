@@ -1,0 +1,41 @@
+#include <iostream>
+using namespace std;
+#include <cmath>
+
+struct Point {
+    double x, y;
+};
+
+void translate(Point& p, double dx, double dy) {
+    p.x += dx;
+    p.y += dy;
+}
+
+void printTriangle(Point p1, Point p2, Point p3) {
+    cout << "Triangle vertices:\n";
+    cout << "(" << p1.x << ", " << p1.y << ")\n";
+    cout << "(" << p2.x << ", " << p2.y << ")\n";
+    cout << "(" << p3.x << ", " << p3.y << ")\n";
+}
+
+int main() {
+    Point p1 = {0, sqrt(3) / 3};  // Top vertex
+    Point p2 = {-0.5, -sqrt(3) / 6}; // Bottom-left vertex
+    Point p3 = {0.5, -sqrt(3) / 6};  // Bottom-right vertex
+
+    double dx, dy;
+    cout << "Enter translation vector (dx, dy): ";
+    cin >> dx >> dy;
+
+    cout << "Original:\n";
+    printTriangle(p1, p2, p3);
+
+    translate(p1, dx, dy);
+    translate(p2, dx, dy);
+    translate(p3, dx, dy);
+
+    cout << "After translation by (" << dx << ", " << dy << "):\n";
+    printTriangle(p1, p2, p3);
+
+    return 0;
+}

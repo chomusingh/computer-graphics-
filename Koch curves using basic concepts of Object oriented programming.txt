@@ -1,0 +1,105 @@
+#include <SFML/Graphics.hpp>
+#include <cmath>
+#include <vector>
+#include <iostream>
+
+class Point {
+public:
+    double x, y;
+
+    Point(double x = 0, double y = 0) : x(x), y(y) {}
+};
+
+class KochFractal {
+private:
+    std::vector<Point> points;
+
+    // Helper function to calculate a new point
+    Point calculatePoint(const Point& p1, const Point& p2, double fraction) {
+        return Point(
+            p1.x + fraction * (p2.x - p1.x),
+            p1.y + fraction * (p2.y - p1.y)
+        );
+    }
+
+    // Helper function to calculate the peak of the triangle
+    Point calculatePeak(const Point& p1, const Point& p2) {
+        double dx = p2.x - p1.x;
+        double dy = p2.y - p1.y;
+
+        // Rotate by 60 degrees to get the peak of the equilateral triangle
+        double x = p1.x + dx / 2 - dy * sqrt(3) / 6;
+        double y = p1.y + dy / 2 + dx * sqrt(3) / 6;
+
+        return Point(x, y);
+    }
+
+public:
+    KochFractal(const Point& start, const Point& end) {
+        points.push_back(start);
+        points.push_back(end);
+    }
+
+    void generateFractal(int depth) {
+        for (int d = 0; d < depth; ++d) {
+            std::vector<Point> newPoints;
+
+            for (size_t i = 0; i < points.size() - 1; ++i) {
+                Point p1 = points[i];
+                Point p2 = points[i + 1];
+
+                // Calculate the new points
+                Point a = calculatePoint(p1, p2, 1.0 / 3);
+                Point b = calculatePoint(p1, p2, 2.0 / 3);
+                Point peak = calculatePeak(a, b);
+
+                // Add points to the new list
+                newPoints.push_back(p1);
+                newPoints.push_back(a);
+                newPoints.push_back(peak);
+                newPoints.push_back(b);
+            }
+            newPoints.push_back(points.back()); // Add the last point
+            points = newPoints;                // Update points
+        }
+    }
+
+    void draw(sf::RenderWindow& window) {
+        sf::VertexArray lines(sf::LineStrip, points.size());
+
+        for (size_t i = 0; i < points.size(); ++i) {
+            lines[i].position = sf::Vector2f(points[i].x, points[i].y);
+            lines[i].color = sf::Color::White;
+        }
+
+        window.draw(lines);
+    }
+};
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Koch Curve Fractal");
+    window.setFramerateLimit(60);
+
+    // Initial line for the Koch curve
+    Point start(100, 300);
+    Point end(700, 300);
+
+    KochFractal koch(start, end);
+
+    int depth = 0;
+    std::cout << "Enter depth of fractal (0-6 recommended): ";
+    std::cin >> depth;
+
+    if (depth < 0) depth = 0;
+    if (depth > 6) depth = 6;
+
+    koch.generateFractal(depth);
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear(sf::Color::Black);
